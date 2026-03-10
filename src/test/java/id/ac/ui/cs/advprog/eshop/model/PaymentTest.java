@@ -110,4 +110,52 @@ class PaymentTest {
         assertEquals("REJECTED", payment.getStatus());
         assertEquals("FAILED", order.getStatus());
     }
+
+    @Test
+    void testSetStatusOtherValueShouldNotChangeOrderStatus() {
+        voucherPaymentData.put("voucherCode", "ESHOP1234ABC5678");
+        Payment payment = new Payment(order, "VOUCHER_CODE", voucherPaymentData);
+
+        payment.setStatus("PENDING");
+
+        assertEquals("PENDING", payment.getStatus());
+        assertEquals("WAITING_PAYMENT", order.getStatus());
+    }
+
+    @Test
+    void testCreatePaymentWithUnknownMethodShouldBeRejected() {
+        Map<String, String> anyPaymentData = new HashMap<>();
+        anyPaymentData.put("key", "value");
+
+        Payment payment = new Payment(order, "UNKNOWN_METHOD", anyPaymentData);
+
+        assertEquals("REJECTED", payment.getStatus());
+    }
+
+    @Test
+    void testCreateVoucherPaymentIfVoucherCodeNull() {
+        voucherPaymentData.put("voucherCode", null);
+
+        Payment payment = new Payment(order, "VOUCHER_CODE", voucherPaymentData);
+
+        assertEquals("REJECTED", payment.getStatus());
+    }
+
+    @Test
+    void testCreateVoucherPaymentIfPrefixInvalid() {
+        voucherPaymentData.put("voucherCode", "SHOPX1234ABC5678");
+
+        Payment payment = new Payment(order, "VOUCHER_CODE", voucherPaymentData);
+
+        assertEquals("REJECTED", payment.getStatus());
+    }
+
+    @Test
+    void testCreateVoucherPaymentIfDigitCountInvalid() {
+        voucherPaymentData.put("voucherCode", "ESHOPABCDABC5678");
+
+        Payment payment = new Payment(order, "VOUCHER_CODE", voucherPaymentData);
+
+        assertEquals("REJECTED", payment.getStatus());
+    }
 }

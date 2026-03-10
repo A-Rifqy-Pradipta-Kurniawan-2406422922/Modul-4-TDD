@@ -70,6 +70,19 @@ class PaymentRepositoryTest {
     }
 
     @Test
+    void testFindByIdShouldSkipFirstEntryAndFindSecond() {
+        Payment first = payments.get(0);
+        Payment second = payments.get(1);
+
+        paymentRepository.save(first);
+        paymentRepository.save(second);
+
+        Payment findResult = paymentRepository.findById(second.getId());
+        assertNotNull(findResult);
+        assertEquals(second.getId(), findResult.getId());
+    }
+
+    @Test
     void testFindByIdIfIdNotFound() {
         Payment findResult = paymentRepository.findById("invalid-id");
         assertNull(findResult);
@@ -82,5 +95,21 @@ class PaymentRepositoryTest {
 
         List<Payment> allPayments = paymentRepository.findAll();
         assertEquals(2, allPayments.size());
+    }
+
+    @Test
+    void testSaveMultiplePaymentsWithSameId_shouldKeepBothEntries() {
+        Payment payment1 = payments.get(0);
+
+        Payment payment2 = new Payment(payment1.getOrder(), payment1.getMethod(), payment1.getPaymentData());
+        payment2.setId(payment1.getId());
+
+        paymentRepository.save(payment1);
+        paymentRepository.save(payment2);
+
+        List<Payment> allPayments = paymentRepository.findAll();
+        assertEquals(2, allPayments.size());
+        assertEquals(payment1.getId(), allPayments.get(0).getId());
+        assertEquals(payment2.getId(), allPayments.get(1).getId());
     }
 }
