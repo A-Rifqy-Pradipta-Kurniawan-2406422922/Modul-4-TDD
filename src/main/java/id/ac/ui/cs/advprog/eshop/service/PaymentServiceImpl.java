@@ -16,15 +16,14 @@ public class PaymentServiceImpl implements PaymentService {
 
     @Override
     public Payment addPayment(Order order, String method, Map<String, String> paymentData) {
-        Payment payment = new Payment(order, method, paymentData);
+        Payment payment = createPayment(order, method, paymentData);
         paymentRepository.save(payment);
         return payment;
     }
 
     @Override
     public Payment setStatus(Payment payment, String status) {
-        payment.setStatus(status);
-        return payment;
+        return updatePaymentStatus(payment, status);
     }
 
     @Override
@@ -35,5 +34,14 @@ public class PaymentServiceImpl implements PaymentService {
     @Override
     public List<Payment> getAllPayments() {
         return paymentRepository.findAll();
+    }
+
+    private Payment createPayment(Order order, String method, Map<String, String> paymentData) {
+        return new Payment(order, method, paymentData);
+    }
+
+    private Payment updatePaymentStatus(Payment payment, String status) {
+        payment.setStatus(status);
+        return payment;
     }
 }
