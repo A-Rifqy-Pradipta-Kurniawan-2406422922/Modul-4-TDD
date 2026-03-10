@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Payment Result</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<div class="container my-4">
+    <h3>Payment Request Submitted</h3>
+    <p>
+        Payment process started for order:
+        <strong th:text="${orderId}"></strong>
+    </p>
+
+    <a th:href="@{/order/history}" class="btn btn-primary">Back to History</a>
+</div>
+</body>
+</html>

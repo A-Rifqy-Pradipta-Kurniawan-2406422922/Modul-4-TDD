@@ -70,3 +70,54 @@ Berdasarkan workflow yang saya miliki saat ini, implementasi sudah memenuhi defi
 
 Dari sisi CD, saya telah menerapkan deployment otomatis ke Heroku ketika terjadi push ke branch main menggunakan workflow deploy-heroku.yml. Dengan mekanisme ini, proses release tidak lagi manual karena pipeline langsung melakukan build dan deploy. Aplikasi juga telah berhasil terdeploy dan dapat diakses pada URL berikut:
 https://modul-2-rifqy-770a91ef4d62.herokuapp.com
+
+## Module 3
+### Reflection 1
+> Explain what principles you apply to your project
+
+Setelah menyelesaikan module 3 ini, saya telah mengimplementasikan prinsip SOLID pada project sebagai berikut:
+1. Single Responsibility Principle
+Dengan memisahkan CarController dari ProductController sehingga setiap controller hanya fokus pada satu entitas. ProductController hanya menangani product, dan CarController hanya menangani car.
+2. Open Closed Principle
+Dengan membuat abstraction repository dan service agar perilaku sistem dapat diperluas tanpa harus mengubah struktur utama yang sudah ada. Implementasi baru dapat ditambahkan selama mengikuti interface yang sama.
+3. Liskov Substitution Principle
+Dengan menghapus inheritance CarController terhadap ProductController karena perilaku keduanya tidak sama. Dengan membuat keduanya independen, perilaku sistem menjadi lebih konsisten.
+4. Interface Segregation Principle
+Dengan memecah kontrak repository menjadi interface terpisah read dan write, sehingga class yang menggunakannya hanya bergantung pada method yang memang dibutuhkan.
+5. Dependency Inversion Principle
+Controller dan service diubah agar bergantung pada interface, bukan kode implementasi. Contohnya CarController bergantung ke CarService, dan service bergantung ke abstraction repository.
+
+### Reflection 2
+> Explain the advantages of applying SOLID principles to your project with examples
+
+Menurut saya, terdapat beberapa keuntungan saat menerapkan SOLID pada project ini:
+1. Struktur kode menjadi lebih rapi dan jelas
+Dengan memisahkan ProductController dan CarController, tanggung jawab tiap class lebih jelas. Hal ini mempermudah saat membaca alur dan saat melakukan perubahan fitur.
+2. Proses maintenance menjadi lebih mudah
+Karena ketergantungan menjadi abstraction, perubahan pada detail implementasi tidak langsung berdampak ke banyak class. Ini membantu ketika ingin melakukan perubahan pada suatu class.
+3. Risiko perubahan yang merusak fitur lain lebih kecil
+Dengan prinsip SRP dan ISP, perubahan pada fitur car tidak perlu menyentuh logika product secara langsung, sehingga menjadi lebih isolated.
+
+### Reflection 3
+> Explain the disadvantages of not applying SOLID principles to your project with examples
+
+Jika SOLID tidak diterapkan, ada beberapa dampak negatif yang cukup terasa:
+1. Class menjadi terlalu besar dan sulit dipahami
+Jika controller untuk car dan product tetap digabung, class akan terus bertumpuk dan membuat debugging lebih sulit.
+2. Ketergantungan antar komponen menjadi terlalu kuat
+Jika controller atau service langsung bergantung pada implementasi kode, perubahan kecil di satu tempat bisa memaksa perubahan di class lain.
+3. Sulit mengembangkan fitur baru secara aman
+Tanpa OCP dan ISP, penambahan fitur sering berujung mengubah banyak kode lama. Risiko regression menjadi lebih tinggi.
+4. Sulit menjaga kualitas
+Kode yang tidak terstruktur membuat testing, refactoring, dan kolaborasi tim menjadi sulit.
+
+## Module 4
+### Reflection
+
+>1. Reflect based on Percival (2017) proposed self-reflective questions (in “Principles and Best Practice of Testing” submodule, chapter “Evaluating Your Testing Objectives”), whether this TDD flow is useful enough for you or not. If not, explain things that you need to do next time you make more tests.
+
+Alur TDD sangat membantu dan cukup efektif untuk pengembangan fitur Order di modul ini. Dengan pola RED, GREEN, lalu REFACTOR, saya jadi lebih fokus pada alur yang benar terlebih dahulu, bukan langsung menulis implementasi yang tidak penting. Saat test gagal di fase RED, membuat kita tau fungsi yang belum terpenuhi, lalu di fase GREEN tinggal tulis kode minimum agar test lulus, kemudian REFACTOR.
+
+>2. You have created unit tests in Tutorial. Now reflect whether your tests have successfully followed F.I.R.S.T. principle or not. If not, explain things that you need to do the next time you create more tests.
+
+Secara umum, test sudah cukup mengikuti prinsip F.I.R.S.T. Pada Fast, seluruh unit test berjalan cepat karena tidak bergantung pada database atau external call. Dari sisi Independent, tiap test dibuat terpisah sehingga tidak bergantung urutan eksekusi test lain. Untuk Repeatable, hasil test konsisten saat dijalankan ulang. Dari sisi Self-Validating, assertion yang dipakai sudah menghasilkan status pass atau fail secara jelas tanpa validasi manual. Terakhir untuk Timely, test ditulis terlebih dahulu sebelum implementasi utama sesuai alur tutorial TDD.
