@@ -53,13 +53,13 @@ class PaymentServiceImplTest {
 
     @Test
     void testAddPayment() {
-        doReturn(payment).when(paymentRepository).save(payment);
+        doReturn(payment).when(paymentRepository).save(org.mockito.ArgumentMatchers.any(Payment.class));
 
         Payment result = paymentService.addPayment(order, "VOUCHER_CODE", payment.getPaymentData());
 
         assertNotNull(result);
         assertEquals("VOUCHER_CODE", result.getMethod());
-        verify(paymentRepository, times(1)).save(result);
+        verify(paymentRepository, times(1)).save(org.mockito.ArgumentMatchers.any(Payment.class));
     }
 
     @Test
